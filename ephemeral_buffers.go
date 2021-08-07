@@ -83,10 +83,10 @@ func (p *Pool) Acquire(tag string) *Buffer {
 		}
 	}
 
-	p.lock.Unlock()
-
 	eb.tag = tag
 	eb.acquiredAt = time.Now()
+
+	p.lock.Unlock()
 
 	return eb
 }
