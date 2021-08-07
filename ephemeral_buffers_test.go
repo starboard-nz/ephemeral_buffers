@@ -89,3 +89,19 @@ func TestAcquireRelease(t *testing.T) {
 
 	pool.Free()
 }
+
+func TestOverflow(t *testing.T) {
+	pool := ephemeral_buffers.NewPool(logCtx, 1, 1024)
+
+	t.Logf("Expect warnings:")
+
+	for i := 4; i < 10000; i++ {
+		b0 := pool.Acquire("TestOverflow")
+
+		for j := 0; j < i; j++ {
+			b0.Write([]byte{1, 2, 3, 4})
+		}
+
+		b0.Release()
+	}
+}

@@ -22,6 +22,7 @@ type Buffer struct {
 	bytes.Buffer
 	pool         *Pool
 	index        int
+	origSize     int
 	acquiredAt   time.Time
 	tag          string
 }
@@ -33,9 +34,11 @@ func (eb *Buffer) Release() {
 	}
 
 	// check size
-	if eb.Cap() > eb.pool.size {
+	if eb.Cap() > eb.origSize {
 		log.Ctx(eb.pool.ctx).Warn().Msgf("Buffer with tag %s allocated %d bytes (%d requested)",
 			eb.tag, eb.Cap(), eb.pool.size)
+
+		eb.origSize = eb.Cap()
 	}
 
 	eb.pool.lock.Lock()
@@ -154,7 +157,7 @@ func NewPool(ctx context.Context, count, size int) *Pool {
 	for i := 0; i < count; i++ {
 		buf := bytes.Buffer{}
 		buf.Grow(size)
-		ebuf := Buffer{Buffer: buf, pool: &p}
+		ebuf := Buffer{Buffer: buf, pool: &p, origSize: size}
 		p.buffersAvailable <-&ebuf
 	}
 
