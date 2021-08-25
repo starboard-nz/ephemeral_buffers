@@ -183,7 +183,7 @@ func (p *Pool) poolMonitor() {
 
 		for _, eb := range p.buffersInUse {
 			if eb != nil {
-				if eb.acquiredAt.Add(100 * time.Millisecond).Before(now) {
+				if eb.acquiredAt.Add(time.Second).Before(now) {
 					log.Ctx(p.ctx).Warn().Msgf("Buffer with tag %s held "+
 						"for %v", eb.tag, time.Since(eb.acquiredAt))
 				}
