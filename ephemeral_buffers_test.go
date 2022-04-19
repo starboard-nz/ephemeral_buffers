@@ -16,7 +16,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"gitlab.com/xerra/common/ephemeral_buffers"
+	"github.com/starboard-nz/ephemeral_buffers"
 )
 
 var logCtx context.Context
@@ -43,7 +43,7 @@ func TestBasic(t *testing.T) {
 		t.Errorf("incorrect result")
 	}
 
-	if pool.BuffersAvailable() != n - 1 {
+	if pool.BuffersAvailable() != n-1 {
 		t.Errorf("incorrect result")
 	}
 
@@ -72,7 +72,7 @@ func TestAcquireRelease(t *testing.T) {
 	buffers := []*ephemeral_buffers.Buffer{}
 
 	for i := 0; i < n; i++ {
-		s := fmt.Sprintf("test string %d", i + 1)
+		s := fmt.Sprintf("test string %d", i+1)
 
 		b := pool.Acquire("TestAcquireRelease")
 		b.Write([]byte(s))

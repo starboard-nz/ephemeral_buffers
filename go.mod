@@ -1,4 +1,4 @@
-module gitlab.com/xerra/common/ephemeral_buffers
+module github.com/starboard-nz/ephemeral_buffers
 
 go 1.16
 
